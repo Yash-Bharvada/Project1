@@ -1,111 +1,506 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sample App</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nova — High‑Fidelity Landing Page</title>
+  <meta name="description" content="A premium, responsive, high‑fidelity website template with dark mode, animations, and components." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* =========================
+       Base + Theme
+    ========================= */
+    :root {
+      --bg: #0b0f17;
+      --bg-soft: #101624;
+      --text: #e6e9ef;
+      --muted: #a1a6b3;
+      --card: #0e1422;
+      --primary: #7c5cff;
+      --primary-2: #20c997;
+      --ring: rgba(124,92,255,.6);
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius-lg: 26px;
+      --grad: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.25), transparent 60%),
+              radial-gradient(1000px 500px at 10% 0%, rgba(32,201,151,.20), transparent 60%),
+              linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f7f8fb;
+        --bg-soft: #ffffff;
+        --text: #0e1220;
+        --muted: #647086;
+        --card: #ffffff;
+        --primary: #5b43ff;
+        --primary-2: #0fb886;
+        --ring: rgba(91,67,255,.45);
+        --border: rgba(14,18,32,.08);
+        --shadow: 0 10px 30px rgba(14,18,32,.08);
+        --grad: radial-gradient(900px 500px at 90% -10%, rgba(91,67,255,.20), transparent 60%),
+                radial-gradient(800px 400px at 0% 0%, rgba(15,184,134,.18), transparent 60%),
+                linear-gradient(180deg, rgba(14,18,32,.03), rgba(14,18,32,0));
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      padding: 0; margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .container { width: min(1200px, 92vw); margin: 0 auto; }
+
+    /* =========================
+       Utilities
+    ========================= */
+    .btn { display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.2rem; border-radius: 12px; border:1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); backdrop-filter: blur(6px); color: var(--text); font-weight:600; box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .2s ease, background .2s ease; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 15px 40px rgba(0,0,0,.25); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color:#fff; border: none; }
+
+    .badge { padding:.35rem .6rem; border-radius:999px; font-size:.8rem; border:1px solid var(--border); color: var(--muted); background: rgba(255,255,255,.04); }
+
+    .card { border:1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); backdrop-filter: blur(8px); border-radius: var(--radius); box-shadow: var(--shadow); }
+
+    .grid { display:grid; gap: 1.2rem; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    @media (max-width: 900px){ .grid-3{ grid-template-columns: 1fr; } }
+    @media (max-width: 900px){ .grid-2{ grid-template-columns: 1fr; } }
+
+    .muted { color: var(--muted); }
+
+    /* =========================
+       Nav
+    ========================= */
+    .navwrap { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); background: rgba(0,0,0,.15); border-bottom: 1px solid var(--border); }
+    @media (prefers-color-scheme: light) { .navwrap { background: rgba(255,255,255,.6);} }
+    nav.container { display:flex; align-items:center; justify-content:space-between; padding: .9rem 0; }
+    .brand { display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.3px; }
+    .brand svg { width:28px; height:28px; }
+    .navlinks { display:flex; gap:1rem; align-items:center; }
+    .navlinks a { padding:.6rem .8rem; border-radius: 10px; border:1px solid transparent; }
+    .navlinks a:hover { border-color: var(--border); background: rgba(255,255,255,.04); }
+    .menu-btn { display:none; }
+    @media(max-width:800px){
+      .menu-btn { display:flex; }
+      .navlinks { display:none; position:absolute; left:0; right:0; top:60px; flex-direction:column; gap:.6rem; padding:1rem; background: var(--bg-soft); border-bottom:1px solid var(--border); }
+      .navlinks.open { display:flex; }
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background: #f9f9f9;
-      color: #333;
-    }
+    /* =========================
+       Hero
+    ========================= */
+    .hero { position:relative; overflow:hidden; padding: 6rem 0 3rem; background: var(--grad); }
+    .hero .container { display:grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; align-items:center; }
+    @media(max-width: 900px){ .hero .container { grid-template-columns: 1fr; } }
 
-    header {
-      background: #4CAF50;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-    }
+    .kicker { display:flex; align-items:center; gap:.6rem; margin-bottom: .9rem; }
+    .title { font-size: clamp(2rem, 4vw + 1rem, 3.4rem); line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { margin-top: .8rem; color: var(--muted); font-size: 1.05rem; }
+    .cta { margin-top: 1.4rem; display:flex; gap:.8rem; flex-wrap:wrap; }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      background: #333;
-    }
+    .hero-visual { position:relative; aspect-ratio: 4/3; border-radius: var(--radius-lg); border:1px solid var(--border); overflow:hidden; background: radial-gradient(800px 500px at 0% 0%, rgba(124,92,255,.18), transparent 60%); box-shadow: var(--shadow); }
+    .hero-visual .dots { position:absolute; inset:0; background: radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.15) 50%, transparent 60%), radial-gradient(2px 2px at 30% 60%, rgba(255,255,255,.12) 50%, transparent 60%), radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,.10) 50%, transparent 60%); opacity:.6; }
+    .glow { position:absolute; width:180px; height:180px; background: radial-gradient(closest-side, rgba(124,92,255,.7), transparent); filter: blur(30px); border-radius: 50%; animation: float 8s ease-in-out infinite; }
+    .glow.g2 { left:auto; right:10%; top:40%; background: radial-gradient(closest-side, rgba(32,201,151,.7), transparent); animation-duration: 9.5s; }
+    @keyframes float { 0% { transform: translate(0, 0);} 50% { transform: translate(10px, -20px);} 100% { transform: translate(0, 0);} }
 
-    nav a {
-      color: #fff;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none;
-    }
+    /* =========================
+       Logos Row
+    ========================= */
+    .logos { padding: 1.6rem 0 2.4rem; opacity:.9; }
+    .logos .row { display:grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 1.2rem; align-items:center; }
+    .logos .row .logo { border:1px dashed var(--border); border-radius: 12px; padding: .8rem; background: rgba(255,255,255,.02); text-align:center; font-weight:600; color: var(--muted); }
+    @media(max-width: 900px){ .logos .row { grid-template-columns: repeat(3,1fr); } }
 
-    nav a:hover {
-      background: #575757;
-    }
+    /* =========================
+       Feature Cards
+    ========================= */
+    .section { padding: 3rem 0; }
+    .section h2 { font-size: clamp(1.6rem, 1.6rem + 1vw, 2.2rem); letter-spacing:-.02em; margin-bottom: .6rem; }
+    .section p.lead { color: var(--muted); margin-bottom: 1.6rem; }
 
-    .container {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
+    .feature { padding:1.2rem; display:flex; gap:1rem; }
+    .feature .icon { width:46px; height:46px; border-radius:12px; display:grid; place-items:center; background: linear-gradient(135deg, rgba(124,92,255,.15), rgba(32,201,151,.18)); border:1px solid var(--border); }
 
-    .card {
-      background: #fff;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+    /* =========================
+       Showcase Card
+    ========================= */
+    .showcase { display:grid; grid-template-columns: 1fr 1fr; gap:1.2rem; }
+    @media(max-width: 900px){ .showcase { grid-template-columns: 1fr; } }
+    .splash { aspect-ratio: 16/10; border-radius: var(--radius-lg); overflow:hidden; border:1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,.03), transparent); position:relative; }
+    .splash::after { content:""; position:absolute; inset:0; background: radial-gradient(600px 300px at 80% 0%, rgba(255,255,255,.06), transparent 60%); pointer-events:none; }
 
-    button {
-      background: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    /* =========================
+       Pricing
+    ========================= */
+    .pricing { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .price-card { padding:1.3rem; position:relative; overflow:hidden; }
+    .price-card .top { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+    .price { font-size:2rem; font-weight:800; }
+    .price small { font-weight:600; color: var(--muted); }
+    .list { margin:1rem 0; }
+    .list li { display:flex; gap:.6rem; align-items:flex-start; margin:.5rem 0; }
+    .popular { outline: 2px solid var(--primary); box-shadow: 0 0 0 6px rgba(124,92,255,.12); }
 
-    button:hover {
-      background: #45a049;
-    }
+    /* =========================
+       Testimonials
+    ========================= */
+    .testimonials { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .quote { padding:1rem; font-size: .98rem; }
+
+    /* =========================
+       FAQ
+    ========================= */
+    .faq .item { border-bottom: 1px solid var(--border); }
+    .faq button { width:100%; text-align:left; padding:1rem 0; background:none; border:none; color:inherit; font: inherit; display:flex; justify-content:space-between; align-items:center; }
+    .faq .answer { max-height: 0; overflow:hidden; transition: max-height .3s ease; color: var(--muted); }
+
+    /* =========================
+       CTA + Footer
+    ========================= */
+    .cta-wrap { text-align:center; padding: 3rem 1rem; border-radius: var(--radius-lg); background: linear-gradient(135deg, rgba(124,92,255,.14), rgba(32,201,151,.14)); border:1px solid var(--border);} 
+    footer { padding:2rem 0; color: var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+    /* =========================
+       Focus + Selection
+    ========================= */
+    :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 8px; }
+    ::selection { background: rgba(124,92,255,.35); color: #fff; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>My Sample App</h1>
-    <p>A simple index.html starter template</p>
-  </header>
-
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Features</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-  </nav>
-
-  <div class="container">
-    <div class="card">
-      <h2>Welcome!</h2>
-      <p>This is a simple app layout built using just HTML, CSS, and a little JavaScript.</p>
-      <button onclick="showMessage()">Click Me</button>
-      <p id="message"></p>
-    </div>
-    
-    <div class="card">
-      <h2>Features</h2>
-      <ul>
-        <li>Responsive layout</li>
-        <li>Navigation bar</li>
-        <li>Reusable card components</li>
-        <li>Simple JS interactivity</li>
-      </ul>
-    </div>
+  <!-- ========================= NAV ========================= -->
+  <div class="navwrap">
+    <nav class="container">
+      <a class="brand" href="#top" aria-label="Nova Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="1" y2="0">
+              <stop offset="0" stop-color="var(--primary-2)"/>
+              <stop offset="1" stop-color="var(--primary)"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#g)" d="M12 2l9 5v10l-9 5-9-5V7z"/>
+        </svg>
+        Nova
+      </a>
+      <button class="btn menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">☰ Menu</button>
+      <div class="navlinks" id="menu" role="navigation" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#testimonials">Stories</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+      </div>
+    </nav>
   </div>
 
+  <!-- ========================= HERO ========================= -->
+  <header class="hero" id="top">
+    <div class="container">
+      <div>
+        <div class="kicker">
+          <span class="badge">NEW</span>
+          <span class="muted">Supercharge your web presence</span>
+        </div>
+        <h1 class="title">Build beautiful experiences that feel <em>crafted</em>.</h1>
+        <p class="subtitle">A premium, responsive template with dark mode, glassmorphism, and micro‑interactions. Perfect for SaaS, portfolios, agencies, and startups.</p>
+        <div class="cta">
+          <a href="#pricing" class="btn btn-primary">Start Free</a>
+          <a href="#features" class="btn" aria-label="Learn more about Nova features">Explore Features</a>
+        </div>
+      </div>
+      <div class="hero-visual card">
+        <div class="glow" style="left:10%; top:15%"></div>
+        <div class="glow g2"></div>
+        <div class="dots"></div>
+        <svg viewBox="0 0 800 600" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <linearGradient id="gradLine" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--primary)"/>
+              <stop offset="100%" stop-color="var(--primary-2)"/>
+            </linearGradient>
+            <filter id="blur"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+          <!-- Grid -->
+          <g stroke="rgba(255,255,255,.08)" stroke-width="1">
+            <!-- vertical lines -->
+            <path d="M100 60v480 M200 60v480 M300 60v480 M400 60v480 M500 60v480 M600 60v480 M700 60v480" />
+            <!-- horizontal lines -->
+            <path d="M100 120h600 M100 210h600 M100 300h600 M100 390h600 M100 480h600" />
+          </g>
+          <!-- Polyline chart -->
+          <polyline fill="none" stroke="url(#gradLine)" stroke-width="4" points="100,450 180,420 240,360 300,390 360,330 420,280 480,300 540,240 600,200 660,230 700,160"/>
+          <circle cx="700" cy="160" r="6" fill="url(#gradLine)" filter="url(#blur)"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================= LOGOS ========================= -->
+  <section class="logos">
+    <div class="container">
+      <div class="row">
+        <div class="logo">ACME</div>
+        <div class="logo">ORBIT</div>
+        <div class="logo">ZENCO</div>
+        <div class="logo">MOSAIC</div>
+        <div class="logo">NIMBLE</div>
+        <div class="logo">ATLAS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= FEATURES ========================= -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2>Designed for teams, loved by makers</h2>
+      <p class="lead">Everything you need to launch fast without sacrificing polish. Built with accessibility and performance in mind.</p>
+
+      <div class="grid grid-3">
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">⚡</div>
+          <div>
+            <h3>Blazing Fast</h3>
+            <p class="muted">Lean CSS, zero dependencies, and optimized assets mean sub‑second loads.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">🎨</div>
+          <div>
+            <h3>Polished UI</h3>
+            <p class="muted">Glassmorphism, soft shadows, and tasteful gradients for modern aesthetics.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">🌓</div>
+          <div>
+            <h3>Auto Dark Mode</h3>
+            <p class="muted">Adapts to user preferences with accessible contrast and focus states.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">🔒</div>
+          <div>
+            <h3>Secure by Default</h3>
+            <p class="muted">Semantic HTML, sensible defaults, and best practices baked in.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">🧩</div>
+          <div>
+            <h3>Composable</h3>
+            <p class="muted">Modular cards, grids, and sections to build unique layouts quickly.</p>
+          </div>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">🚀</div>
+          <div>
+            <h3>Production‑Ready</h3>
+            <p class="muted">Accessibility tags, keyboard nav, and focus styles included.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= SHOWCASE ========================= -->
+  <section class="section">
+    <div class="container showcase">
+      <div class="splash card"></div>
+      <div class="card" style="padding:1.2rem;">
+        <span class="badge">Use cases</span>
+        <h3 style="margin:.6rem 0 1rem;">SaaS dashboards, agency sites, portfolios, product launches</h3>
+        <ul class="list" aria-label="Use cases list">
+          <li>✔ Single‑page landing with section anchors</li>
+          <li>✔ Multi‑page structure (duplicate this file)</li>
+          <li>✔ Works offline as static HTML</li>
+        </ul>
+        <div class="cta">
+          <a href="#pricing" class="btn btn-primary">See Pricing</a>
+          <a href="#contact" class="btn">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PRICING ========================= -->
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2>Simple, transparent pricing</h2>
+      <p class="lead">Start free, upgrade when you grow. No credit card needed.</p>
+
+      <div class="grid pricing">
+        <article class="card price-card">
+          <div class="top">
+            <div>
+              <h3>Starter</h3>
+              <p class="muted">For personal projects</p>
+            </div>
+            <div class="price">$0 <small>/mo</small></div>
+          </div>
+          <ul class="list">
+            <li>✔ 1 project</li>
+            <li>✔ Community support</li>
+            <li>✔ Basic components</li>
+          </ul>
+          <a class="btn" href="#contact">Get Started</a>
+        </article>
+
+        <article class="card price-card popular">
+          <div class="top">
+            <div>
+              <h3>Pro</h3>
+              <p class="muted">For startups & teams</p>
+            </div>
+            <div class="price">$19 <small>/mo</small></div>
+          </div>
+          <ul class="list">
+            <li>✔ Unlimited projects</li>
+            <li>✔ Priority email support</li>
+            <li>✔ Advanced components</li>
+            <li>✔ License for client work</li>
+          </ul>
+          <a class="btn btn-primary" href="#contact">Choose Pro</a>
+        </article>
+
+        <article class="card price-card">
+          <div class="top">
+            <div>
+              <h3>Enterprise</h3>
+              <p class="muted">For large organizations</p>
+            </div>
+            <div class="price">Custom</div>
+          </div>
+          <ul class="list">
+            <li>✔ SSO & SAML</li>
+            <li>✔ SLA & dedicated support</li>
+            <li>✔ Design system customization</li>
+          </ul>
+          <a class="btn" href="#contact">Talk to Sales</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= TESTIMONIALS ========================= -->
+  <section id="testimonials" class="section">
+    <div class="container">
+      <h2>Loved by creators and teams</h2>
+      <div class="grid testimonials">
+        <figure class="card quote">
+          <blockquote>“The clean aesthetic and performance blew us away. Our conversion rose 23%.”</blockquote>
+          <figcaption class="muted">— Maya, Product Lead at Orbit</figcaption>
+        </figure>
+        <figure class="card quote">
+          <blockquote>“Built an entire launch site over a weekend. Everything feels cohesive.”</blockquote>
+          <figcaption class="muted">— Evan, Indie Maker</figcaption>
+        </figure>
+        <figure class="card quote">
+          <blockquote>“The accessible defaults saved us weeks. It just works on every device.”</blockquote>
+          <figcaption class="muted">— Priya, Engineering Manager</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= FAQ ========================= -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h2>Frequently asked questions</h2>
+      <div class="card" style="padding: .6rem 1rem;">
+        <div class="faq">
+          <div class="item">
+            <button aria-expanded="false">Can I use this for client projects? <span>+</span></button>
+            <div class="answer"><p>Yes, the Pro and Enterprise tiers include a license for client work.</p></div>
+          </div>
+          <div class="item">
+            <button aria-expanded="false">Does it support dark mode? <span>+</span></button>
+            <div class="answer"><p>Absolutely. It adapts automatically to the user’s system preference.</p></div>
+          </div>
+          <div class="item">
+            <button aria-expanded="false">Is JavaScript required? <span>+</span></button>
+            <div class="answer"><p>No. The core layout is plain HTML/CSS; JS is used for small interactive bits.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CONTACT / CTA ========================= -->
+  <section id="contact" class="section">
+    <div class="container cta-wrap card">
+      <h2>Ready to launch something beautiful?</h2>
+      <p class="muted">Drop your email and we’ll send setup instructions and a starter kit.</p>
+      <form id="signup" class="container" style="display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; margin-top: .8rem;">
+        <label for="email" class="visually-hidden" style="position:absolute; left:-9999px;">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@company.com" required
+               style="padding:.9rem 1rem; border-radius:12px; border:1px solid var(--border); background:var(--bg-soft); color:inherit; min-width:260px; outline:none;" />
+        <button class="btn btn-primary" type="submit">Join the waitlist</button>
+      </form>
+      <p id="formMsg" class="muted" role="status" style="margin-top:.6rem;"></p>
+    </div>
+  </section>
+
+  <!-- ========================= FOOTER ========================= -->
+  <footer class="container">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#g)" d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>
+      Nova
+    </div>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#testimonials">Stories</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="muted">© <span id="year"></span> Nova. All rights reserved.</div>
+  </footer>
+
   <script>
-    function showMessage() {
-      document.getElementById("message").innerText = "🎉 You clicked the button!";
-    }
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu');
+    menuBtn?.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq .item button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const ans = item.querySelector('.answer');
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        ans.style.maxHeight = expanded ? '0' : ans.scrollHeight + 'px';
+      });
+    });
+
+    // Simple form handler (demo)
+    const form = document.getElementById('signup');
+    const msg = document.getElementById('formMsg');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = 'Please enter a valid email.';
+        return;
+      }
+      msg.textContent = 'Thanks! We\'ll be in touch shortly.';
+      form.reset();
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
