@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample App</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background: #4CAF50;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #333;
+    }
+
+    nav a {
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background: #575757;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Sample App</h1>
+    <p>A simple index.html starter template</p>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Features</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h2>Welcome!</h2>
+      <p>This is a simple app layout built using just HTML, CSS, and a little JavaScript.</p>
+      <button onclick="showMessage()">Click Me</button>
+      <p id="message"></p>
+    </div>
+    
+    <div class="card">
+      <h2>Features</h2>
+      <ul>
+        <li>Responsive layout</li>
+        <li>Navigation bar</li>
+        <li>Reusable card components</li>
+        <li>Simple JS interactivity</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function showMessage() {
+      document.getElementById("message").innerText = "🎉 You clicked the button!";
+    }
+  </script>
+</body>
+</html>
